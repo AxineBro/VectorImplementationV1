@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <iostream>
 
-// Изменяет размер внутреннего массива на новую ёмкость.
+// Changes the size of the internal array to the new capacity.
 void Vector::resize(size_t new_capacity) {
     int* new_data = new int[new_capacity];
     std::copy(data, data + size, new_data);
@@ -11,29 +11,29 @@ void Vector::resize(size_t new_capacity) {
     capacity = new_capacity;
 }
 
-// Конструктор по умолчанию.
+// Default constructor.
 Vector::Vector() : size(0), capacity(10) {
     data = new int[capacity];
 }
 
-// Конструктор с начальным размером.
+// Constructor with the initial size.
 Vector::Vector(size_t initial_size) : size(initial_size), capacity(initial_size * 2) {
     data = new int[capacity];
     std::fill(data, data + size, 0);
 }
 
-// Конструктор копирования.
+// Copy constructor.
 Vector::Vector(const Vector& other) : size(other.size), capacity(other.capacity) {
     data = new int[capacity];
     std::copy(other.data, other.data + size, data);
 }
 
-// Деструктор.
+// The destructor.
 Vector::~Vector() {
     delete[] data;
 }
 
-// Добавляет элемент в конец вектора.
+// Adds an element to the end of the vector.
 void Vector::push_back(int val) {
     if (size >= capacity) {
         resize(capacity * 2);
@@ -41,12 +41,12 @@ void Vector::push_back(int val) {
     data[size++] = val;
 }
 
-// Добавляет элемент в начало вектора.
+// Adds an element to the beginning of the vector.
 void Vector::push_front(int val) {
     insert(0, val);
 }
 
-// Вставляет элемент в указанную позицию.
+// Inserts the element in the specified position.
 void Vector::insert(size_t pos, int val) {
     if (pos > size) {
         pos = size;
@@ -59,29 +59,29 @@ void Vector::insert(size_t pos, int val) {
     ++size;
 }
 
-// Удаляет элемент в указанной позиции.
+// Deletes the element at the specified position.
 void Vector::erase(size_t pos) {
     if (pos >= size) return;
     std::copy(data + pos + 1, data + size, data + pos);
     --size;
 }
 
-// Получает текущий размер вектора.
+// Gets the current size of the vector.
 size_t Vector::get_size() const {
     return size;
 }
 
-// Доступ к элементу по индексу (константная версия).
+// Access to the element by index (constant version).
 const int& Vector::operator[](size_t index) const {
     return data[index];
 }
 
-// Доступ к элементу по индексу.
+// Access to the element by index.
 int& Vector::operator[](size_t index) {
     return data[index];
 }
 
-// Сравнивает два вектора на равенство.
+// Compares two vectors for equality.
 bool Vector::operator==(const Vector& other) const {
     if (size != other.size) return false;
     for (size_t i = 0; i < size; i++) {
@@ -90,7 +90,7 @@ bool Vector::operator==(const Vector& other) const {
     return true;
 }
 
-// Выполняет поэлементное сложение двух векторов.
+// Performs the element-wise addition of two vectors.
 Vector Vector::operator+(const Vector& other) const {
     if (size != other.size) {
         std::cerr << "Vectors must be same size for addition." << std::endl;
@@ -104,7 +104,7 @@ Vector Vector::operator+(const Vector& other) const {
     return result;
 }
 
-// Выполняет поэлементное умножение двух векторов.
+// Performs element-wise multiplication of two vectors.
 Vector Vector::operator*(const Vector& other) const {
     if (size != other.size) {
         std::cerr << "Vectors must be same size for multiplication." << std::endl;
@@ -117,7 +117,7 @@ Vector Vector::operator*(const Vector& other) const {
     return result;
 }
 
-// Дружественная функция для вывода вектора в поток.
+// A friendly function for outputting a vector to a stream.
 std::ostream& operator<<(std::ostream& os, const Vector& v) {
     os << "[";
     for (size_t i = 0; i < v.size; ++i) {
