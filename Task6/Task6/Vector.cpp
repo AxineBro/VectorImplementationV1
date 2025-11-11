@@ -4,7 +4,7 @@
 
 // Changes the size of the internal array to the new capacity.
 void Vector::resize(size_t new_capacity) {
-    int* new_data = new int[new_capacity];
+    int* new_data = new int[new_capacity]();
     std::copy(data, data + size, new_data);
     delete[] data;
     data = new_data;
@@ -13,19 +13,30 @@ void Vector::resize(size_t new_capacity) {
 
 // Default constructor.
 Vector::Vector() : size(0), capacity(10) {
-    data = new int[capacity];
+    data = new int[capacity]();
 }
 
 // Constructor with the initial size.
-Vector::Vector(size_t initial_size) : size(initial_size), capacity(initial_size * 2) {
-    data = new int[capacity];
-    std::fill(data, data + size, 0);
+Vector::Vector(size_t initial_size) : size(initial_size), capacity(std::max(initial_size, size_t(10))) {
+    data = new int[capacity]();
 }
 
 // Copy constructor.
 Vector::Vector(const Vector& other) : size(other.size), capacity(other.capacity) {
-    data = new int[capacity];
+    data = new int[capacity]();
     std::copy(other.data, other.data + size, data);
+}
+
+// Assignment operator.
+Vector& Vector::operator=(const Vector& other) {
+    if (this != &other) {
+        delete[] data;
+        size = other.size;
+        capacity = other.capacity;
+        data = new int[capacity]();
+        std::copy(other.data, other.data + size, data);
+    }
+    return *this;
 }
 
 // The destructor.
@@ -97,9 +108,9 @@ Vector Vector::operator+(const Vector& other) const {
         return Vector();
     }
 
-    Vector result(size);
+    Vector result;
     for (size_t i = 0; i < size; ++i) {
-        result[i] = data[i] + other[i];
+        result.push_back(data[i] + other[i]);
     }
     return result;
 }
@@ -110,9 +121,10 @@ Vector Vector::operator*(const Vector& other) const {
         std::cerr << "Vectors must be same size for multiplication." << std::endl;
         return Vector();
     }
-    Vector result(size);
+
+    Vector result;
     for (size_t i = 0; i < size; ++i) {
-        result[i] = data[i] * other[i];
+        result.push_back(data[i] * other[i]);
     }
     return result;
 }
